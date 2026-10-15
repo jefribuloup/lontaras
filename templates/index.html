@@ -1,52 +1,100 @@
 {% extends "base.html" %}
 
-{% block title %}Lontaras | Solusi AI dan Software{% endblock %}
+{% block title %}Lontaras | AI dan software dari Makassar{% endblock %}
 
 {% block content %}
 <section class="hero">
-  <div class="container">
-    <h1>Solusi AI dan Software untuk Institusi</h1>
-    <p>[Nama PT] membangun platform AI, aplikasi web, dan software desktop untuk kampus, lembaga sertifikasi, dan bisnis.</p>
-    <a class="btn" href="#kontak">Hubungi Kami</a>
+  <p class="eyebrow mono">Makassar &middot; Sejak 2026</p>
+  <h1 class="hero-title">
+    Sistem AI dan software yang <em>benar-benar dipakai</em>, bukan sekadar dipamerkan.
+  </h1>
+  <div class="hero-foot">
+    <p class="lead">
+      [Nama PT] membangun platform AI, aplikasi web, dan software desktop untuk kampus,
+      lembaga sertifikasi, dan bisnis di Indonesia.
+    </p>
+    <div class="btn-row">
+      <a class="btn" href="#kontak">Mulai proyek</a>
+      <a class="link" href="#produk">Lihat produk &rarr;</a>
+    </div>
   </div>
+  <svg class="hero-mark" viewBox="0 0 200 200" aria-hidden="true">
+    <path d="M100 8 192 100 100 192 8 100Z" fill="none" stroke="currentColor" stroke-width="2"/>
+    <path d="M100 42 158 100 100 158 42 100Z" fill="none" stroke="currentColor" stroke-width="2"/>
+    <path d="M100 76 124 100 100 124 76 100Z" fill="currentColor"/>
+  </svg>
 </section>
 
-<section id="tentang" class="section">
-  <div class="container">
-    <h2>Tentang Kami</h2>
-    <p>Perusahaan teknologi berbasis di Makassar yang berfokus pada pengembangan produk AI dan software yang praktis dan andal.</p>
+<section id="layanan" class="sec">
+  <div class="sec-head">
+    <span class="mono">01 / Layanan</span>
+    <h2>Apa yang kami kerjakan</h2>
   </div>
+  <ul class="list">
+    <li class="row">
+      <span class="num">01</span>
+      <h3>Platform dan agen AI</h3>
+      <p>Chatbot, agen multi-model, dan pencarian berbasis dokumen untuk layanan dan operasional.</p>
+    </li>
+    <li class="row">
+      <span class="num">02</span>
+      <h3>Aplikasi web dan formulir</h3>
+      <p>Website dinamis, pendaftaran daring, dan sistem informasi yang terhubung ke data Anda.</p>
+    </li>
+    <li class="row">
+      <span class="num">03</span>
+      <h3>Software desktop</h3>
+      <p>Aplikasi Windows untuk kebutuhan institusi: keamanan profil, pencarian dokumen, dan otomasi.</p>
+    </li>
+    <li class="row">
+      <span class="num">04</span>
+      <h3>Pengolahan data dokumen</h3>
+      <p>Ekstraksi data dari dokumen dan identitas secara otomatis, rapi, dan siap diolah.</p>
+    </li>
+  </ul>
 </section>
 
-<section id="layanan" class="section alt">
-  <div class="container">
-    <h2>Layanan</h2>
-    <div class="grid">
-      <article class="card">
-        <h3>Platform AI</h3>
-        <p>Chatbot dan agen AI untuk kebutuhan layanan dan operasional.</p>
-      </article>
-      <article class="card">
-        <h3>Aplikasi Web</h3>
-        <p>Website dinamis, formulir pendaftaran, dan sistem informasi.</p>
-      </article>
-      <article class="card">
-        <h3>Software Desktop</h3>
-        <p>Aplikasi Windows dan pencarian dokumen untuk kebutuhan institusi.</p>
-      </article>
-      <article class="card">
-        <h3>Pengolahan Data</h3>
-        <p>Ekstraksi dan pengolahan data dokumen secara otomatis.</p>
-      </article>
+<section id="produk" class="sec ink">
+  <div class="sec-head">
+    <span class="mono">02 / Produk</span>
+    <h2>Dibuat sendiri, dipakai nyata</h2>
+  </div>
+  <div class="prods">
+    <a class="prod" href="https://conversa2026.vercel.app" target="_blank" rel="noopener">
+      <span class="tag mono">Platform AI</span>
+      <h3>Conversa AI</h3>
+      <p>Platform multi-agent dengan perutean antar model AI untuk kebutuhan institusi.</p>
+      <span class="go">Buka &nearr;</span>
+    </a>
+    <div class="prod">
+      <span class="tag mono">Desktop</span>
+      <h3>DocFind AI</h3>
+      <p>Pencarian dokumen berbasis AI yang berjalan di komputer Anda.</p>
+    </div>
+    <div class="prod">
+      <span class="tag mono">Desktop</span>
+      <h3>LUP</h3>
+      <p>Pengunci profil Chrome dengan kata sandi untuk komputer bersama.</p>
     </div>
   </div>
 </section>
 
-<section id="kontak" class="section">
-  <div class="container">
-    <h2>Kontak</h2>
-    <p>Email: <a href="mailto:halo@lontaras.com">halo@lontaras.com</a></p>
-    <p>Makassar, Sulawesi Selatan</p>
+<section id="cara-kerja" class="sec">
+  <div class="sec-head">
+    <span class="mono">03 / Cara kerja</span>
+    <h2>Sederhana, bertahap, jelas</h2>
   </div>
+  <ol class="steps">
+    <li><b>Pahami.</b> Kita bicara soal masalah nyata Anda, bukan fitur yang terdengar bagus.</li>
+    <li><b>Bangun.</b> Versi awal cepat dirilis, lalu disempurnakan berdasarkan pemakaian.</li>
+    <li><b>Serahkan.</b> Sistem berjalan, terdokumentasi, dan tetap kami dukung.</li>
+  </ol>
+</section>
+
+<section id="kontak" class="sec contact">
+  <span class="mono">04 / Kontak</span>
+  <h2>Punya kebutuhan sistem?</h2>
+  <a class="mail" href="mailto:halo@lontaras.com">halo@lontaras.com</a>
+  <p class="lead">Ceritakan singkat masalah Anda. Kami balas dengan langkah yang konkret.</p>
 </section>
 {% endblock %}

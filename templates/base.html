@@ -4,28 +4,40 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}Lontaras{% endblock %}</title>
-  <meta name="description" content="{% block description %}Website resmi [Nama PT].{% endblock %}">
+  <meta name="description" content="{% block description %}Platform AI, aplikasi web, dan software desktop dari Makassar.{% endblock %}">
+  <meta name="theme-color" content="#efe9dd">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..800;1,9..144,300..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-  <header class="site-header">
-    <div class="container">
-      <a class="brand" href="{{ url_for('index') }}">Lontaras</a>
-      <nav>
-        <a href="{{ url_for('index') }}#tentang">Tentang</a>
-        <a href="{{ url_for('index') }}#layanan">Layanan</a>
-        <a href="{{ url_for('index') }}#kontak">Kontak</a>
-      </nav>
-    </div>
+  <header class="top">
+    <a class="brand" href="{{ url_for('index') }}" aria-label="Lontaras">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+        <path d="M12 1.5 22.5 12 12 22.5 1.5 12Z" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M12 7.5 16.5 12 12 16.5 7.5 12Z" fill="currentColor"/>
+      </svg>
+      <span>Lontaras</span>
+    </a>
+    <nav class="menu" aria-label="Navigasi utama">
+      <a href="{{ url_for('index') }}#layanan">Layanan</a>
+      <a href="{{ url_for('index') }}#produk">Produk</a>
+      <a href="{{ url_for('index') }}#cara-kerja">Cara kerja</a>
+      <a class="pill" href="{{ url_for('index') }}#kontak">Bicara dengan kami</a>
+    </nav>
   </header>
 
   <main>
     {% block content %}{% endblock %}
   </main>
 
-  <footer class="site-footer">
-    <div class="container">
-      <p>&copy; 2026 [Nama PT]. Seluruh hak dilindungi.</p>
+  <footer class="foot">
+    <div class="foot-word" aria-hidden="true">Lontaras</div>
+    <div class="foot-row">
+      <span>&copy; 2026 [Nama PT]</span>
+      <span>Makassar, Sulawesi Selatan</span>
+      <span class="mono">5°09′S 119°26′E</span>
     </div>
   </footer>
 

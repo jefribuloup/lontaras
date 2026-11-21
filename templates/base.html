@@ -9,6 +9,10 @@
   <script>
     // Set tema sebelum render supaya tidak berkedip.
     (function () {
+      // Tampilkan preloader sejak awal; dilepas oleh preloader.js (pengaman: 10 detik).
+      var r = document.documentElement;
+      r.classList.add("is-loading");
+      setTimeout(function () { r.classList.remove("is-loading"); }, 10000);
       try {
         var t = localStorage.getItem("lontaras-theme");
         if (t !== "dark" && t !== "light") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
@@ -24,6 +28,12 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
+  <div class="preloader" id="preloader" role="status" aria-live="polite">
+    <div class="preloader-chip">
+      <span class="preloader-text" data-i18n="pre.text">Sedang Memuat ...</span>
+    </div>
+  </div>
+
   <header class="top">
     <a class="brand" href="{{ url_for('index') }}">Lontaras</a>
     <nav class="menu" aria-label="Navigasi utama" data-i18n-attr="aria-label:nav.label">
@@ -40,6 +50,7 @@
         <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
       </button>
     </nav>
+    <div class="progress" id="progress" aria-hidden="true"><span></span></div>
   </header>
 
   <main id="main" tabindex="-1">
@@ -60,6 +71,7 @@
     </nav>
   </footer>
 
+  <script src="{{ url_for('static', filename='js/preloader.js') }}"></script>
   <script src="{{ url_for('static', filename='js/i18n.js') }}"></script>
   <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/nav.js') }}" defer></script>

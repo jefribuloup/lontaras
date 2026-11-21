@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}Lontaras{% endblock %}</title>
-  <meta name="description" content="{% block description %}Aplikasi web, software desktop, dan sistem AI buatan Makassar.{% endblock %}">
+  <title data-i18n="{% block title_key %}meta.title{% endblock %}">{% block title %}Lontaras{% endblock %}</title>
+  <meta name="description" data-i18n-attr="content:meta.desc" content="{% block description %}Aplikasi web, software desktop, dan sistem AI buatan Makassar.{% endblock %}">
   <meta name="theme-color" content="#F6EFE4">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,11 +14,15 @@
 <body>
   <header class="top">
     <a class="brand" href="{{ url_for('index') }}">Lontaras</a>
-    <nav class="menu" aria-label="Navigasi utama">
-      <a href="{{ url_for('index') }}#layanan">Layanan</a>
-      <a href="{{ url_for('index') }}#produk">Produk</a>
-      <a href="{{ url_for('index') }}#cara-kerja">Cara kerja</a>
-      <a class="pill" href="{{ url_for('index') }}#kontak">Hubungi saya</a>
+    <nav class="menu" aria-label="Navigasi utama" data-i18n-attr="aria-label:nav.label">
+      <a href="{{ url_for('index') }}#layanan" data-i18n="nav.services">Layanan</a>
+      <a href="{{ url_for('index') }}#produk" data-i18n="nav.products">Produk</a>
+      <a href="{{ url_for('index') }}#cara-kerja" data-i18n="nav.how">Cara kerja</a>
+      <a class="pill" href="{{ url_for('index') }}#kontak" data-i18n="nav.contact">Hubungi saya</a>
+      <div class="lang" role="group" aria-label="Bahasa / Language">
+        <button type="button" data-set-lang="id" aria-pressed="true">ID</button>
+        <button type="button" data-set-lang="en" aria-pressed="false">EN</button>
+      </div>
     </nav>
   </header>
 
@@ -31,11 +35,12 @@
     <div class="foot-word" aria-hidden="true">Lontaras</div>
     <div class="foot-row">
       <span>&copy; 2026 [Nama PT]</span>
-      <span>Makassar, Sulawesi Selatan</span>
+      <span data-i18n="foot.place">Makassar, Sulawesi Selatan</span>
       <span>5°09′S 119°26′E</span>
     </div>
   </footer>
 
+  <script src="{{ url_for('static', filename='js/i18n.js') }}"></script>
   <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
 </body>
 </html>

@@ -46,7 +46,15 @@
     "contact.label": "Contact",
     "contact.title": "Want to make your work easier?",
     "contact.lead": "Just write what you'd like to ask, consult about, or anything about your company.",
-    "foot.place": "Makassar, South Sulawesi"
+    "foot.place": "Makassar, South Sulawesi",
+    "foot.legal": "Legal",
+    "foot.privacy": "Privacy Policy",
+    "foot.terms": "Terms of Service",
+    "legal.back": "← Back to home",
+    "legal.privacy.title": "Privacy Policy | Lontaras",
+    "legal.privacy.desc": "Lontaras privacy policy: what data we collect, how we use it, and your rights.",
+    "legal.terms.title": "Terms of Service | Lontaras",
+    "legal.terms.desc": "Lontaras terms of service: site usage terms, intellectual property, and limitation of liability."
   };
 
   // Kumpulkan elemen + simpan teks asli (Indonesia).

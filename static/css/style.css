@@ -223,6 +223,9 @@ main.page-in { animation: page-in .28s ease both; }
 html.is-loading .preloader { display: flex; }
 html.is-loading body { overflow: hidden; }
 .preloader.is-hiding { opacity: 0; visibility: hidden; }
+/* Saat pindah halaman: fade-in halus (fill "backwards" agar is-hiding tetap bisa menyembunyikan) */
+.preloader.is-nav { animation: pre-in .18s ease backwards; }
+@keyframes pre-in { from { opacity: 0; } to { opacity: 1; } }
 .preloader-chip { padding: 18px 36px; border-radius: 999px; background: #2B211B; border: 1px solid transparent; box-shadow: 0 2px 0 var(--line), 0 14px 34px rgba(43, 33, 27, .18); }
 :root[data-theme="dark"] .preloader-chip { background: #2A201A; border-color: var(--line); }
 

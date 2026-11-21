@@ -169,6 +169,7 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 700; margin: 0; line-height
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  main.page-in { animation: none; }
   * { transition: none !important; }
 }
 
@@ -204,3 +205,10 @@ html[lang="en"] [data-l="id"], html:not([lang="en"]) [data-l="en"] { display: no
 .legal p { margin: 0 0 14px; }
 .legal ul { margin: 0 0 14px; padding-left: 22px; display: grid; gap: 8px; }
 .legal li b { color: var(--ink); }
+
+/* Transisi antar halaman */
+main { transition: opacity .14s ease, transform .14s ease; }
+main:focus { outline: none; }
+main.page-out { opacity: 0; transform: translateY(6px); }
+main.page-in { animation: page-in .28s ease both; }
+@keyframes page-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }

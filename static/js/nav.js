@@ -97,6 +97,7 @@
   async function go(u, push) {
     const t = ++token;
     positions.set(current, window.scrollY);
+    if (window.preloader) window.preloader.start();
 
     const m = getMain();
     const leave = reduced.matches
@@ -119,6 +120,8 @@
     const restore = push ? undefined : positions.get(current);
     if (restore !== undefined) jump(restore);
     else jump(hashTarget(u.hash));
+
+    if (window.preloader) window.preloader.done();
 
     const nm = getMain();
     if (nm) nm.focus({ preventScroll: true });

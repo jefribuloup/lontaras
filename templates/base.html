@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title data-i18n="{% block title_key %}meta.title{% endblock %}">{% block title %}Lontaras{% endblock %}</title>
-  <meta name="description" data-i18n-attr="content:meta.desc" content="{% block description %}Aplikasi web, software desktop, dan sistem AI buatan Makassar.{% endblock %}">
+  <meta name="description" data-i18n-attr="content:{% block desc_key %}meta.desc{% endblock %}" content="{% block description %}Aplikasi web, software desktop, dan sistem AI buatan Makassar.{% endblock %}">
   <meta name="theme-color" content="#F6EFE4">
   <script>
     // Set tema sebelum render supaya tidak berkedip.
@@ -54,6 +54,10 @@
       <span data-i18n="foot.place">Makassar, Sulawesi Selatan</span>
       <span>5°09′S 119°26′E</span>
     </div>
+    <nav class="foot-links" aria-label="Legal" data-i18n-attr="aria-label:foot.legal">
+      <a href="{{ url_for('privacy') }}" data-i18n="foot.privacy">Kebijakan Privasi</a>
+      <a href="{{ url_for('terms') }}" data-i18n="foot.terms">Syarat Layanan</a>
+    </nav>
   </footer>
 
   <script src="{{ url_for('static', filename='js/i18n.js') }}"></script>

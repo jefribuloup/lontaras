@@ -1,134 +1,67 @@
-// Toggle bahasa ID/EN tanpa reload.
-// Teks Indonesia = isi HTML asli (baik untuk SEO & tanpa JS). Terjemahan English ada di kamus EN.
-(function () {
-  const STORAGE_KEY = "lontaras-lang";
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title data-i18n="{% block title_key %}meta.title{% endblock %}">{% block title %}Lontaras{% endblock %}</title>
+  <meta name="description" data-i18n-attr="content:{% block desc_key %}meta.desc{% endblock %}" content="{% block description %}Aplikasi web, software desktop, dan sistem AI buatan Makassar.{% endblock %}">
+  <meta name="theme-color" content="#F6EFE4">
+  <script>
+    // Set tema sebelum render supaya tidak berkedip.
+    (function () {
+      try {
+        var t = localStorage.getItem("lontaras-theme");
+        if (t !== "dark" && t !== "light") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.setAttribute("data-theme", t);
+        var m = document.querySelector('meta[name="theme-color"]');
+        if (m) m.setAttribute("content", t === "dark" ? "#1A1411" : "#F6EFE4");
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..800;1,9..144,300..800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="{{ url_for('index') }}">Lontaras</a>
+    <nav class="menu" aria-label="Navigasi utama" data-i18n-attr="aria-label:nav.label">
+      <a href="{{ url_for('index') }}#layanan" data-i18n="nav.services">Layanan</a>
+      <a href="{{ url_for('index') }}#produk" data-i18n="nav.products">Produk</a>
+      <a href="{{ url_for('index') }}#cara-kerja" data-i18n="nav.how">Cara kerja</a>
+      <a class="pill" href="{{ url_for('index') }}#kontak" data-i18n="nav.contact">Hubungi saya</a>
+      <div class="lang" role="group" aria-label="Bahasa / Language">
+        <button type="button" data-set-lang="id" aria-pressed="true">ID</button>
+        <button type="button" data-set-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <button type="button" class="theme" id="theme-toggle" data-i18n-attr="aria-label:theme.toggle" aria-label="Ganti tema gelap/terang">
+        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      </button>
+    </nav>
+  </header>
 
-  const EN = {
-    "meta.title": "Lontaras | Software and AI made in Makassar",
-    "meta.desc": "Web apps, desktop software, and AI systems made in Makassar.",
-    "nav.label": "Main navigation",
-    "nav.services": "Services",
-    "nav.products": "Products",
-    "nav.how": "How it works",
-    "nav.contact": "Contact me",
-    "theme.toggle": "Toggle dark/light theme",
-    "hero.eyebrow": "Makassar · Since 2026",
-    "hero.title": "Repetitive office work, <em>we help streamline it</em> with software.",
-    "hero.lead": "[Nama PT] builds web apps, desktop software, and AI systems for universities, certification bodies, and businesses in Indonesia. Everything starts with the problems you face every day.",
-    "hero.cta1": "Tell me what you need",
-    "hero.cta2": "See what I'm working on",
-    "svc.label": "Services",
-    "svc.title": "What I can build",
-    "svc1.t": "Web and desktop apps",
-    "svc1.d": "Websites, information systems, and desktop apps designed to grow alongside your needs.",
-    "svc2.t": "AI agents",
-    "svc2.d": "AI-based assistants that answer questions and handle repetitive tasks automatically.",
-    "svc3.t": "Enterprise applications",
-    "svc3.d": "Systems for company and institutional operations, such as record-keeping, approvals, and reporting that are still done manually.",
-    "svc4.t": "Academic applications",
-    "svc4.d": "Apps that support education, such as student data management, learning, and administration.",
-    "prod.label": "Products",
-    "prod.title": "What I'm working on",
-    "tag.ai": "AI platform",
-    "tag.desktop": "Desktop app",
-    "p1.t": "AI assistant for institutions",
-    "p1.d": "Daily services and operations assisted by AI that can use several models at once.",
-    "p2.t": "Document finder",
-    "p2.d": "Search document contents with AI help, all running on your own computer.",
-    "p3.t": "Browser profile locker",
-    "p3.d": "Chrome profiles protected by a password, ideal for shared computers.",
-    "status.wip": "In progress",
-    "how.label": "How it works",
-    "how.title": "A simple process",
-    "how.s1": "<b>Talk first.</b> You tell me what's getting in your way. I ask questions until I understand, before writing any code.",
-    "how.s2": "<b>Build small first.</b> An early version is made quickly so you can try it, then improved from real use.",
-    "how.s3": "<b>Hand over and stay with you.</b> The system runs, there are usage notes, and you know who to contact if something goes wrong.",
-    "contact.label": "Contact",
-    "contact.title": "Want to make your work easier?",
-    "contact.lead": "Just write what you'd like to ask, consult about, or anything about your company.",
-    "foot.place": "Makassar, South Sulawesi",
-    "foot.legal": "Legal",
-    "foot.privacy": "Privacy Policy",
-    "foot.terms": "Terms of Service",
-    "legal.back": "← Back to home",
-    "legal.privacy.title": "Privacy Policy | Lontaras",
-    "legal.privacy.desc": "Lontaras privacy policy: what data we collect, how we use it, and your rights.",
-    "legal.terms.title": "Terms of Service | Lontaras",
-    "legal.terms.desc": "Lontaras terms of service: site usage terms, intellectual property, and limitation of liability."
-  };
+  <main id="main" tabindex="-1">
+    {% block content %}{% endblock %}
+  </main>
 
-  const SELECTOR = "[data-i18n], [data-i18n-html], [data-i18n-attr]";
-  const items = new Map(); // elemen -> { teks asli (Indonesia) + kunci }
-  let current = "id";
+  <div class="songket" aria-hidden="true"></div>
+  <footer class="foot">
+    <div class="foot-word" aria-hidden="true">Lontaras</div>
+    <div class="foot-row">
+      <span>&copy; 2026 [Nama PT]</span>
+      <span data-i18n="foot.place">Makassar, Sulawesi Selatan</span>
+      <span>5°09′S 119°26′E</span>
+    </div>
+    <nav class="foot-links" aria-label="Legal" data-i18n-attr="aria-label:foot.legal">
+      <a href="{{ url_for('privacy') }}" data-i18n="foot.privacy">Kebijakan Privasi</a>
+      <a href="{{ url_for('terms') }}" data-i18n="foot.terms">Syarat Layanan</a>
+    </nav>
+  </footer>
 
-  // Daftarkan satu elemen: simpan teks asli (Indonesia) dari DOM saat ini.
-  function register(el) {
-    if (!el) return;
-    const item = { el, id: {} };
-    if (el.hasAttribute("data-i18n")) {
-      item.text = el.getAttribute("data-i18n");
-      item.id.text = el.textContent;
-    }
-    if (el.hasAttribute("data-i18n-html")) {
-      item.html = el.getAttribute("data-i18n-html");
-      item.id.html = el.innerHTML;
-    }
-    if (el.hasAttribute("data-i18n-attr")) {
-      item.attrs = el.getAttribute("data-i18n-attr").split(";").map((pair) => {
-        const [attr, key] = pair.split(":").map((v) => v.trim());
-        item.id["attr:" + attr] = el.getAttribute(attr);
-        return { attr, key };
-      });
-    }
-    items.set(el, item);
-  }
-
-  const pick = (lang, key, fallback) => (lang === "en" && EN[key] !== undefined ? EN[key] : fallback);
-
-  function applyItem(it, lang) {
-    if (it.text) it.el.textContent = pick(lang, it.text, it.id.text);
-    if (it.html) it.el.innerHTML = pick(lang, it.html, it.id.html);
-    if (it.attrs) {
-      it.attrs.forEach(({ attr, key }) => {
-        it.el.setAttribute(attr, pick(lang, key, it.id["attr:" + attr]));
-      });
-    }
-  }
-
-  function apply(lang) {
-    current = lang;
-    items.forEach((it) => applyItem(it, lang));
-    document.documentElement.lang = lang;
-    document.querySelectorAll("[data-set-lang]").forEach((btn) => {
-      btn.setAttribute("aria-pressed", String(btn.dataset.setLang === lang));
-    });
-  }
-
-  // Dipanggil setelah konten halaman diganti (navigasi tanpa reload).
-  function refresh(root) {
-    items.forEach((_, el) => { if (!el.isConnected) items.delete(el); });
-    (root || document).querySelectorAll(SELECTOR).forEach((el) => {
-      if (!items.has(el)) register(el);
-    });
-    apply(current);
-  }
-
-  function setLang(lang) {
-    if (lang !== "id" && lang !== "en") return;
-    apply(lang);
-    try { localStorage.setItem(STORAGE_KEY, lang); } catch (_) { /* abaikan */ }
-  }
-
-  document.querySelectorAll(SELECTOR).forEach(register);
-
-  document.querySelectorAll("[data-set-lang]").forEach((btn) => {
-    btn.addEventListener("click", () => setLang(btn.dataset.setLang));
-  });
-
-  let saved = null;
-  try { saved = localStorage.getItem(STORAGE_KEY); } catch (_) { /* abaikan */ }
-  if (saved === "en") apply("en");
-
-  window.setLang = setLang;
-  window.i18n = { setLang, refresh, register };
-})();
+  <script src="{{ url_for('static', filename='js/i18n.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/nav.js') }}" defer></script>
+</body>
+</html>

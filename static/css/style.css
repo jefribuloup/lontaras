@@ -212,3 +212,36 @@ main:focus { outline: none; }
 main.page-out { opacity: 0; transform: translateY(6px); }
 main.page-in { animation: page-in .28s ease both; }
 @keyframes page-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* Progress bar di bawah navbar */
+.progress { position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; pointer-events: none; opacity: 0; transition: opacity .3s ease; }
+.progress.is-active { opacity: 1; }
+.progress span { display: block; height: 100%; transform-origin: left center; transform: scaleX(0); background: linear-gradient(90deg, var(--accent), var(--gold)); border-radius: 0 3px 3px 0; box-shadow: 0 0 8px var(--accent); transition: transform .25s ease-out; }
+
+/* Preloader (muat awal): overlay di bawah header supaya progress bar tetap terlihat */
+.preloader { position: fixed; inset: 0; z-index: 15; display: none; align-items: center; justify-content: center; background: var(--bg); transition: opacity .35s ease, visibility .35s ease; }
+html.is-loading .preloader { display: flex; }
+html.is-loading body { overflow: hidden; }
+.preloader.is-hiding { opacity: 0; visibility: hidden; }
+.preloader-chip { padding: 18px 36px; border-radius: 999px; background: #2B211B; border: 1px solid transparent; box-shadow: 0 2px 0 var(--line), 0 14px 34px rgba(43, 33, 27, .18); }
+:root[data-theme="dark"] .preloader-chip { background: #2A201A; border-color: var(--line); }
+
+/* Teks terisi dari putih ke merah, kiri ke kanan, berulang */
+.preloader-text {
+  display: block;
+  font-family: var(--serif); font-weight: 700; font-size: clamp(1.25rem, 3.4vw, 1.75rem); letter-spacing: .01em; white-space: nowrap;
+  color: #fff;
+  background-image: linear-gradient(90deg, #FF4D3D 0 50%, #fff 50% 100%);
+  background-size: 200% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: pre-fill 1.8s ease-in-out infinite;
+}
+@keyframes pre-fill { 0% { background-position: 100% 0; } 85%, 100% { background-position: 0 0; } }
+@supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+  .preloader-text { -webkit-text-fill-color: currentColor; animation: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .preloader-text { animation: none; background-position: 0 0; }
+}

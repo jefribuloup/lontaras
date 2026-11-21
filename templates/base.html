@@ -6,6 +6,18 @@
   <title data-i18n="{% block title_key %}meta.title{% endblock %}">{% block title %}Lontaras{% endblock %}</title>
   <meta name="description" data-i18n-attr="content:meta.desc" content="{% block description %}Aplikasi web, software desktop, dan sistem AI buatan Makassar.{% endblock %}">
   <meta name="theme-color" content="#F6EFE4">
+  <script>
+    // Set tema sebelum render supaya tidak berkedip.
+    (function () {
+      try {
+        var t = localStorage.getItem("lontaras-theme");
+        if (t !== "dark" && t !== "light") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.setAttribute("data-theme", t);
+        var m = document.querySelector('meta[name="theme-color"]');
+        if (m) m.setAttribute("content", t === "dark" ? "#1A1411" : "#F6EFE4");
+      } catch (e) {}
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..800;1,9..144,300..800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -23,6 +35,10 @@
         <button type="button" data-set-lang="id" aria-pressed="true">ID</button>
         <button type="button" data-set-lang="en" aria-pressed="false">EN</button>
       </div>
+      <button type="button" class="theme" id="theme-toggle" data-i18n-attr="aria-label:theme.toggle" aria-label="Ganti tema gelap/terang">
+        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      </button>
     </nav>
   </header>
 

@@ -11,6 +11,16 @@ def index():
     return render_template("index.html")
 
 
+@app.route("/kebijakan-privasi")
+def privacy():
+    return render_template("privacy.html")
+
+
+@app.route("/syarat-layanan")
+def terms():
+    return render_template("terms.html")
+
+
 @app.errorhandler(404)
 def not_found(_error):
     return render_template("index.html"), 404

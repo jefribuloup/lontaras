@@ -57,9 +57,13 @@
     "legal.terms.desc": "Lontaras terms of service: site usage terms, intellectual property, and limitation of liability."
   };
 
-  // Kumpulkan elemen + simpan teks asli (Indonesia).
-  const items = [];
-  document.querySelectorAll("[data-i18n], [data-i18n-html], [data-i18n-attr]").forEach((el) => {
+  const SELECTOR = "[data-i18n], [data-i18n-html], [data-i18n-attr]";
+  const items = new Map(); // elemen -> { teks asli (Indonesia) + kunci }
+  let current = "id";
+
+  // Daftarkan satu elemen: simpan teks asli (Indonesia) dari DOM saat ini.
+  function register(el) {
+    if (!el) return;
     const item = { el, id: {} };
     if (el.hasAttribute("data-i18n")) {
       item.text = el.getAttribute("data-i18n");
@@ -76,25 +80,37 @@
         return { attr, key };
       });
     }
-    items.push(item);
-  });
+    items.set(el, item);
+  }
 
   const pick = (lang, key, fallback) => (lang === "en" && EN[key] !== undefined ? EN[key] : fallback);
 
+  function applyItem(it, lang) {
+    if (it.text) it.el.textContent = pick(lang, it.text, it.id.text);
+    if (it.html) it.el.innerHTML = pick(lang, it.html, it.id.html);
+    if (it.attrs) {
+      it.attrs.forEach(({ attr, key }) => {
+        it.el.setAttribute(attr, pick(lang, key, it.id["attr:" + attr]));
+      });
+    }
+  }
+
   function apply(lang) {
-    items.forEach((it) => {
-      if (it.text) it.el.textContent = pick(lang, it.text, it.id.text);
-      if (it.html) it.el.innerHTML = pick(lang, it.html, it.id.html);
-      if (it.attrs) {
-        it.attrs.forEach(({ attr, key }) => {
-          it.el.setAttribute(attr, pick(lang, key, it.id["attr:" + attr]));
-        });
-      }
-    });
+    current = lang;
+    items.forEach((it) => applyItem(it, lang));
     document.documentElement.lang = lang;
     document.querySelectorAll("[data-set-lang]").forEach((btn) => {
       btn.setAttribute("aria-pressed", String(btn.dataset.setLang === lang));
     });
+  }
+
+  // Dipanggil setelah konten halaman diganti (navigasi tanpa reload).
+  function refresh(root) {
+    items.forEach((_, el) => { if (!el.isConnected) items.delete(el); });
+    (root || document).querySelectorAll(SELECTOR).forEach((el) => {
+      if (!items.has(el)) register(el);
+    });
+    apply(current);
   }
 
   function setLang(lang) {
@@ -102,6 +118,8 @@
     apply(lang);
     try { localStorage.setItem(STORAGE_KEY, lang); } catch (_) { /* abaikan */ }
   }
+
+  document.querySelectorAll(SELECTOR).forEach(register);
 
   document.querySelectorAll("[data-set-lang]").forEach((btn) => {
     btn.addEventListener("click", () => setLang(btn.dataset.setLang));
@@ -112,4 +130,5 @@
   if (saved === "en") apply("en");
 
   window.setLang = setLang;
+  window.i18n = { setLang, refresh, register };
 })();

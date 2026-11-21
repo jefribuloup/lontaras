@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 
+{% block title_key %}meta.title{% endblock %}
 {% block title %}Lontaras | Software dan AI buatan Makassar{% endblock %}
 
 {% block content %}
@@ -7,19 +8,19 @@
   <div class="blob blob--sage" aria-hidden="true"></div>
   <div class="blob blob--blush" aria-hidden="true"></div>
   <div class="blob blob--gold" aria-hidden="true"></div>
-  <p class="eyebrow mono">Makassar &middot; Sejak 2026</p>
-  <h1 class="hero-title">
+  <p class="eyebrow mono" data-i18n="hero.eyebrow">Makassar &middot; Sejak 2026</p>
+  <h1 class="hero-title" data-i18n-html="hero.title">
     Kerjaan kantor yang berulang-ulang, <em>saya bantu rapikan</em> lewat software.
   </h1>
   <div class="hero-foot">
-    <p class="lead">
+    <p class="lead" data-i18n="hero.lead">
       [Nama PT] membuat aplikasi web, software desktop, dan sistem AI untuk kampus,
       lembaga sertifikasi, dan usaha di Indonesia. Semuanya dimulai dari masalah
       yang Anda hadapi sehari-hari.
     </p>
     <div class="btn-row">
-      <a class="btn" href="#kontak">Ceritakan kebutuhan Anda</a>
-      <a class="link" href="#produk">Lihat yang sedang dikerjakan</a>
+      <a class="btn" href="#kontak" data-i18n="hero.cta1">Ceritakan kebutuhan Anda</a>
+      <a class="link" href="#produk" data-i18n="hero.cta2">Lihat yang sedang dikerjakan</a>
     </div>
   </div>
 </section>
@@ -28,76 +29,76 @@
 
 <section id="layanan" class="sec">
   <div class="sec-head">
-    <span class="mono">Layanan</span>
-    <h2>Yang bisa saya kerjakan</h2>
+    <span class="mono" data-i18n="svc.label">Layanan</span>
+    <h2 data-i18n="svc.title">Yang bisa saya kerjakan</h2>
   </div>
   <ul class="list">
     <li class="row">
       <span class="num">01</span>
-      <h3>Aplikasi web dan desktop</h3>
-      <p>Website, sistem informasi, dan aplikasi desktop yang dirancang seiring kebutuhan dan perkembangan.</p>
+      <h3 data-i18n="svc1.t">Aplikasi web dan desktop</h3>
+      <p data-i18n="svc1.d">Website, sistem informasi, dan aplikasi desktop yang dirancang seiring kebutuhan dan perkembangan.</p>
     </li>
     <li class="row">
       <span class="num">02</span>
-      <h3>Agen AI</h3>
-      <p>Asisten berbasis AI yang membantu menjawab pertanyaan dan mengerjakan tugas berulang secara otomatis.</p>
+      <h3 data-i18n="svc2.t">Agen AI</h3>
+      <p data-i18n="svc2.d">Asisten berbasis AI yang membantu menjawab pertanyaan dan mengerjakan tugas berulang secara otomatis.</p>
     </li>
     <li class="row">
       <span class="num">03</span>
-      <h3>Aplikasi enterprise</h3>
-      <p>Sistem untuk operasional perusahaan dan lembaga, seperti pencatatan, persetujuan, dan pelaporan yang selama ini masih manual.</p>
+      <h3 data-i18n="svc3.t">Aplikasi enterprise</h3>
+      <p data-i18n="svc3.d">Sistem untuk operasional perusahaan dan lembaga, seperti pencatatan, persetujuan, dan pelaporan yang selama ini masih manual.</p>
     </li>
     <li class="row">
       <span class="num">04</span>
-      <h3>Aplikasi akademik</h3>
-      <p>Aplikasi pendukung kegiatan pendidikan, seperti pengelolaan data mahasiswa, pembelajaran, dan administrasi.</p>
+      <h3 data-i18n="svc4.t">Aplikasi akademik</h3>
+      <p data-i18n="svc4.d">Aplikasi pendukung kegiatan pendidikan, seperti pengelolaan data mahasiswa, pembelajaran, dan administrasi.</p>
     </li>
   </ul>
 </section>
 
 <section id="produk" class="sec ink">
   <div class="sec-head">
-    <span class="mono">Produk</span>
-    <h2>Yang sedang dikerjakan</h2>
+    <span class="mono" data-i18n="prod.label">Produk</span>
+    <h2 data-i18n="prod.title">Yang sedang dikerjakan</h2>
   </div>
   <div class="prods">
     <div class="prod">
-      <span class="tag mono">Platform AI</span>
-      <h3>Asisten AI untuk lembaga</h3>
-      <p>Layanan dan operasional harian dibantu AI yang bisa memakai beberapa model sekaligus.</p>
-      <span class="status">Dalam pengerjaan</span>
+      <span class="tag mono" data-i18n="tag.ai">Platform AI</span>
+      <h3 data-i18n="p1.t">Asisten AI untuk lembaga</h3>
+      <p data-i18n="p1.d">Layanan dan operasional harian dibantu AI yang bisa memakai beberapa model sekaligus.</p>
+      <span class="status" data-i18n="status.wip">Dalam pengerjaan</span>
     </div>
     <div class="prod">
-      <span class="tag mono">Aplikasi desktop</span>
-      <h3>Pencari dokumen</h3>
-      <p>Mencari isi dokumen dengan bantuan AI, dan semuanya berjalan di komputer Anda sendiri.</p>
-      <span class="status">Dalam pengerjaan</span>
+      <span class="tag mono" data-i18n="tag.desktop">Aplikasi desktop</span>
+      <h3 data-i18n="p2.t">Pencari dokumen</h3>
+      <p data-i18n="p2.d">Mencari isi dokumen dengan bantuan AI, dan semuanya berjalan di komputer Anda sendiri.</p>
+      <span class="status" data-i18n="status.wip">Dalam pengerjaan</span>
     </div>
     <div class="prod">
-      <span class="tag mono">Aplikasi desktop</span>
-      <h3>Pengunci profil browser</h3>
-      <p>Profil Chrome dilindungi kata sandi, cocok untuk komputer yang dipakai bergantian.</p>
-      <span class="status">Dalam pengerjaan</span>
+      <span class="tag mono" data-i18n="tag.desktop">Aplikasi desktop</span>
+      <h3 data-i18n="p3.t">Pengunci profil browser</h3>
+      <p data-i18n="p3.d">Profil Chrome dilindungi kata sandi, cocok untuk komputer yang dipakai bergantian.</p>
+      <span class="status" data-i18n="status.wip">Dalam pengerjaan</span>
     </div>
   </div>
 </section>
 
 <section id="cara-kerja" class="sec">
   <div class="sec-head">
-    <span class="mono">Cara kerja</span>
-    <h2>Prosesnya sederhana</h2>
+    <span class="mono" data-i18n="how.label">Cara kerja</span>
+    <h2 data-i18n="how.title">Prosesnya sederhana</h2>
   </div>
   <ol class="steps">
-    <li><b>Ngobrol dulu.</b> Anda ceritakan apa yang merepotkan. Saya tanya sampai paham, sebelum menulis kode apa pun.</li>
-    <li><b>Bikin yang kecil dulu.</b> Versi awal dibuat cepat supaya bisa Anda coba, lalu diperbaiki dari pemakaian nyata.</li>
-    <li><b>Serahkan dan temani.</b> Sistem berjalan, ada catatan cara pakainya, dan Anda tahu harus menghubungi siapa kalau ada kendala.</li>
+    <li data-i18n-html="how.s1"><b>Ngobrol dulu.</b> Anda ceritakan apa yang merepotkan. Saya tanya sampai paham, sebelum menulis kode apa pun.</li>
+    <li data-i18n-html="how.s2"><b>Bikin yang kecil dulu.</b> Versi awal dibuat cepat supaya bisa Anda coba, lalu diperbaiki dari pemakaian nyata.</li>
+    <li data-i18n-html="how.s3"><b>Serahkan dan temani.</b> Sistem berjalan, ada catatan cara pakainya, dan Anda tahu harus menghubungi siapa kalau ada kendala.</li>
   </ol>
 </section>
 
 <section id="kontak" class="sec contact">
-  <span class="mono">Kontak</span>
-  <h2>Ingin memudahkan pekerjaan Anda?</h2>
+  <span class="mono" data-i18n="contact.label">Kontak</span>
+  <h2 data-i18n="contact.title">Ingin memudahkan pekerjaan Anda?</h2>
   <a class="mail" href="mailto:halo@lontaras.com">halo@lontaras.com</a>
-  <p class="lead">Tulis saja apa yang ingin Anda tanyakan, konsultasikan atau apapun seputar perusahaan Anda</p>
+  <p class="lead" data-i18n="contact.lead">Tulis saja apa yang ingin Anda tanyakan, konsultasikan atau apapun seputar perusahaan Anda</p>
 </section>
 {% endblock %}

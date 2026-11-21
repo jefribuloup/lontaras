@@ -1,134 +1,159 @@
-// Toggle bahasa ID/EN tanpa reload.
-// Teks Indonesia = isi HTML asli (baik untuk SEO & tanpa JS). Terjemahan English ada di kamus EN.
+// Navigasi antar halaman tanpa reload penuh.
+// Hanya isi <main>, judul, dan meta description yang diganti; header & footer tetap.
+// Kalau ada yang gagal, otomatis kembali ke navigasi biasa.
 (function () {
-  const STORAGE_KEY = "lontaras-lang";
+  if (!window.fetch || !window.history || !history.pushState || !window.DOMParser) return;
 
-  const EN = {
-    "meta.title": "Lontaras | Software and AI made in Makassar",
-    "meta.desc": "Web apps, desktop software, and AI systems made in Makassar.",
-    "nav.label": "Main navigation",
-    "nav.services": "Services",
-    "nav.products": "Products",
-    "nav.how": "How it works",
-    "nav.contact": "Contact me",
-    "theme.toggle": "Toggle dark/light theme",
-    "hero.eyebrow": "Makassar · Since 2026",
-    "hero.title": "Repetitive office work, <em>we help streamline it</em> with software.",
-    "hero.lead": "[Nama PT] builds web apps, desktop software, and AI systems for universities, certification bodies, and businesses in Indonesia. Everything starts with the problems you face every day.",
-    "hero.cta1": "Tell me what you need",
-    "hero.cta2": "See what I'm working on",
-    "svc.label": "Services",
-    "svc.title": "What I can build",
-    "svc1.t": "Web and desktop apps",
-    "svc1.d": "Websites, information systems, and desktop apps designed to grow alongside your needs.",
-    "svc2.t": "AI agents",
-    "svc2.d": "AI-based assistants that answer questions and handle repetitive tasks automatically.",
-    "svc3.t": "Enterprise applications",
-    "svc3.d": "Systems for company and institutional operations, such as record-keeping, approvals, and reporting that are still done manually.",
-    "svc4.t": "Academic applications",
-    "svc4.d": "Apps that support education, such as student data management, learning, and administration.",
-    "prod.label": "Products",
-    "prod.title": "What I'm working on",
-    "tag.ai": "AI platform",
-    "tag.desktop": "Desktop app",
-    "p1.t": "AI assistant for institutions",
-    "p1.d": "Daily services and operations assisted by AI that can use several models at once.",
-    "p2.t": "Document finder",
-    "p2.d": "Search document contents with AI help, all running on your own computer.",
-    "p3.t": "Browser profile locker",
-    "p3.d": "Chrome profiles protected by a password, ideal for shared computers.",
-    "status.wip": "In progress",
-    "how.label": "How it works",
-    "how.title": "A simple process",
-    "how.s1": "<b>Talk first.</b> You tell me what's getting in your way. I ask questions until I understand, before writing any code.",
-    "how.s2": "<b>Build small first.</b> An early version is made quickly so you can try it, then improved from real use.",
-    "how.s3": "<b>Hand over and stay with you.</b> The system runs, there are usage notes, and you know who to contact if something goes wrong.",
-    "contact.label": "Contact",
-    "contact.title": "Want to make your work easier?",
-    "contact.lead": "Just write what you'd like to ask, consult about, or anything about your company.",
-    "foot.place": "Makassar, South Sulawesi",
-    "foot.legal": "Legal",
-    "foot.privacy": "Privacy Policy",
-    "foot.terms": "Terms of Service",
-    "legal.back": "← Back to home",
-    "legal.privacy.title": "Privacy Policy | Lontaras",
-    "legal.privacy.desc": "Lontaras privacy policy: what data we collect, how we use it, and your rights.",
-    "legal.terms.title": "Terms of Service | Lontaras",
-    "legal.terms.desc": "Lontaras terms of service: site usage terms, intellectual property, and limitation of liability."
-  };
+  const reduced = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : { matches: false };
+  const cache = new Map();      // path+query -> Promise<Document>
+  const positions = new Map();  // path+query -> posisi scroll terakhir
+  const keyOf = (u) => u.pathname + u.search;
+  let current = keyOf(location);
+  let token = 0;
 
-  const SELECTOR = "[data-i18n], [data-i18n-html], [data-i18n-attr]";
-  const items = new Map(); // elemen -> { teks asli (Indonesia) + kunci }
-  let current = "id";
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
 
-  // Daftarkan satu elemen: simpan teks asli (Indonesia) dari DOM saat ini.
-  function register(el) {
-    if (!el) return;
-    const item = { el, id: {} };
-    if (el.hasAttribute("data-i18n")) {
-      item.text = el.getAttribute("data-i18n");
-      item.id.text = el.textContent;
+  const getMain = () => document.querySelector("main");
+
+  function load(u) {
+    const k = keyOf(u);
+    if (!cache.has(k)) {
+      const p = fetch(k, { credentials: "same-origin" })
+        .then((r) => {
+          const type = r.headers.get("content-type") || "";
+          if (!r.ok || !type.includes("text/html")) throw new Error("bukan halaman");
+          return r.text();
+        })
+        .then((html) => new DOMParser().parseFromString(html, "text/html"))
+        .then((doc) => {
+          if (!doc.querySelector("main")) throw new Error("tanpa <main>");
+          return doc;
+        });
+      p.catch(() => cache.delete(k));
+      cache.set(k, p);
     }
-    if (el.hasAttribute("data-i18n-html")) {
-      item.html = el.getAttribute("data-i18n-html");
-      item.id.html = el.innerHTML;
-    }
-    if (el.hasAttribute("data-i18n-attr")) {
-      item.attrs = el.getAttribute("data-i18n-attr").split(";").map((pair) => {
-        const [attr, key] = pair.split(":").map((v) => v.trim());
-        item.id["attr:" + attr] = el.getAttribute(attr);
-        return { attr, key };
-      });
-    }
-    items.set(el, item);
+    return cache.get(k);
   }
 
-  const pick = (lang, key, fallback) => (lang === "en" && EN[key] !== undefined ? EN[key] : fallback);
+  // Kembalikan URL jika link ini boleh ditangani router, selain itu null.
+  function internalUrl(a, e) {
+    if (e && (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey)) return null;
+    if (a.target && a.target !== "_self") return null;
+    if (a.hasAttribute("download") || a.hasAttribute("data-no-spa")) return null;
+    const u = new URL(a.href, location.href);
+    if (u.origin !== location.origin) return null;
+    if (/\.[a-z0-9]+$/i.test(u.pathname) && !/\.html?$/i.test(u.pathname)) return null; // file/aset
+    return u;
+  }
 
-  function applyItem(it, lang) {
-    if (it.text) it.el.textContent = pick(lang, it.text, it.id.text);
-    if (it.html) it.el.innerHTML = pick(lang, it.html, it.id.html);
-    if (it.attrs) {
-      it.attrs.forEach(({ attr, key }) => {
-        it.el.setAttribute(attr, pick(lang, key, it.id["attr:" + attr]));
-      });
+  function copyI18n(from, to, attr) {
+    if (from.hasAttribute(attr)) to.setAttribute(attr, from.getAttribute(attr));
+    else to.removeAttribute(attr);
+  }
+
+  function swap(doc) {
+    const m = getMain();
+    m.innerHTML = doc.querySelector("main").innerHTML;
+    m.classList.remove("page-out", "page-in");
+    void m.offsetWidth; // restart animasi
+    m.classList.add("page-in");
+
+    const t = document.querySelector("title");
+    const nt = doc.querySelector("title");
+    if (t && nt) {
+      copyI18n(nt, t, "data-i18n");
+      t.textContent = nt.textContent;
+    }
+    const d = document.querySelector('meta[name="description"]');
+    const nd = doc.querySelector('meta[name="description"]');
+    if (d && nd) {
+      copyI18n(nd, d, "data-i18n-attr");
+      d.setAttribute("content", nd.getAttribute("content") || "");
+    }
+
+    if (window.i18n) {
+      window.i18n.register(t);
+      window.i18n.register(d);
+      window.i18n.refresh(m);
     }
   }
 
-  function apply(lang) {
-    current = lang;
-    items.forEach((it) => applyItem(it, lang));
-    document.documentElement.lang = lang;
-    document.querySelectorAll("[data-set-lang]").forEach((btn) => {
-      btn.setAttribute("aria-pressed", String(btn.dataset.setLang === lang));
-    });
+  // Scroll instan (tanpa smooth) setelah ganti halaman.
+  function jump(target) {
+    const html = document.documentElement;
+    const prev = html.style.scrollBehavior;
+    html.style.scrollBehavior = "auto";
+    if (typeof target === "number") window.scrollTo(0, target);
+    else if (target) target.scrollIntoView();
+    else window.scrollTo(0, 0);
+    html.style.scrollBehavior = prev;
   }
 
-  // Dipanggil setelah konten halaman diganti (navigasi tanpa reload).
-  function refresh(root) {
-    items.forEach((_, el) => { if (!el.isConnected) items.delete(el); });
-    (root || document).querySelectorAll(SELECTOR).forEach((el) => {
-      if (!items.has(el)) register(el);
-    });
-    apply(current);
+  function hashTarget(hash) {
+    if (!hash || hash.length < 2) return null;
+    try { return document.getElementById(decodeURIComponent(hash.slice(1))); } catch (_) { return null; }
   }
 
-  function setLang(lang) {
-    if (lang !== "id" && lang !== "en") return;
-    apply(lang);
-    try { localStorage.setItem(STORAGE_KEY, lang); } catch (_) { /* abaikan */ }
+  async function go(u, push) {
+    const t = ++token;
+    positions.set(current, window.scrollY);
+
+    const m = getMain();
+    const leave = reduced.matches
+      ? Promise.resolve()
+      : new Promise((resolve) => { m.classList.add("page-out"); setTimeout(resolve, 140); });
+
+    let doc;
+    try {
+      [doc] = await Promise.all([load(u), leave]);
+    } catch (_) {
+      location.href = u.href; // fallback: navigasi biasa
+      return;
+    }
+    if (t !== token) return; // sudah ada navigasi yang lebih baru
+
+    swap(doc);
+    current = keyOf(u);
+    if (push) history.pushState(null, "", u.pathname + u.search + u.hash);
+
+    const restore = push ? undefined : positions.get(current);
+    if (restore !== undefined) jump(restore);
+    else jump(hashTarget(u.hash));
+
+    const nm = getMain();
+    if (nm) nm.focus({ preventScroll: true });
   }
 
-  document.querySelectorAll(SELECTOR).forEach(register);
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest && e.target.closest("a[href]");
+    if (!a) return;
+    const u = internalUrl(a, e);
+    if (!u) return;
 
-  document.querySelectorAll("[data-set-lang]").forEach((btn) => {
-    btn.addEventListener("click", () => setLang(btn.dataset.setLang));
+    if (keyOf(u) === current) {
+      if (u.hash) return; // anchor di halaman yang sama: biarkan browser
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    e.preventDefault();
+    go(u, true);
   });
 
-  let saved = null;
-  try { saved = localStorage.getItem(STORAGE_KEY); } catch (_) { /* abaikan */ }
-  if (saved === "en") apply("en");
+  window.addEventListener("popstate", () => {
+    const u = new URL(location.href);
+    if (keyOf(u) === current) return; // hanya hash yang berubah
+    go(u, false);
+  });
 
-  window.setLang = setLang;
-  window.i18n = { setLang, refresh, register };
+  // Muat halaman lebih awal saat link disorot/disentuh supaya terasa instan.
+  const warm = (e) => {
+    const a = e.target.closest && e.target.closest("a[href]");
+    if (!a) return;
+    const u = internalUrl(a, null);
+    if (u && keyOf(u) !== current) load(u).catch(() => {});
+  };
+  document.addEventListener("mouseover", warm, { passive: true });
+  document.addEventListener("touchstart", warm, { passive: true });
+  document.addEventListener("focusin", warm);
 })();

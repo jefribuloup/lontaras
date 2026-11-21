@@ -12,7 +12,7 @@
       // Tampilkan preloader sejak awal; dilepas oleh preloader.js (pengaman: 10 detik).
       var r = document.documentElement;
       r.classList.add("is-loading");
-      setTimeout(function () { r.classList.remove("is-loading"); }, 10000);
+      window.__preSafety = setTimeout(function () { r.classList.remove("is-loading"); }, 10000);
       try {
         var t = localStorage.getItem("lontaras-theme");
         if (t !== "dark" && t !== "light") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";

@@ -12,6 +12,7 @@
     "nav.how": "How it works",
     "nav.contact": "Contact me",
     "theme.toggle": "Toggle dark/light theme",
+    "pre.text": "Loading ...",
     "hero.eyebrow": "Makassar · Since 2026",
     "hero.title": "Repetitive office work, <em>we help streamline it</em> with software.",
     "hero.lead": "[Nama PT] builds web apps, desktop software, and AI systems for universities, certification bodies, and businesses in Indonesia. Everything starts with the problems you face every day.",

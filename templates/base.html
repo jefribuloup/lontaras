@@ -36,7 +36,8 @@
 
   <header class="top">
     <a class="brand" href="{{ url_for('index') }}">Lontaras</a>
-    <nav class="menu" aria-label="Navigasi utama" data-i18n-attr="aria-label:nav.label">
+    <button type="button" class="nav-toggle" id="nav-toggle" aria-label="Menu" aria-controls="site-menu" aria-expanded="false"><span class="bars" aria-hidden="true"></span></button>
+    <nav class="menu" id="site-menu" aria-label="Navigasi utama" data-i18n-attr="aria-label:nav.label">
       <a href="{{ url_for('index') }}#layanan" data-i18n="nav.services">Layanan</a>
       <a href="{{ url_for('index') }}#produk" data-i18n="nav.products">Produk</a>
       <a href="{{ url_for('index') }}#cara-kerja" data-i18n="nav.how">Cara kerja</a>

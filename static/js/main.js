@@ -2,6 +2,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   initTheme();
   initHeaderShadow();
+  initNavToggle();
 });
 
 // Toggle tema gelap/terang. Awalnya mengikuti sistem, lalu pilihan pengguna disimpan.
@@ -43,4 +44,34 @@ function initHeaderShadow() {
   };
   onScroll();
   window.addEventListener("scroll", onScroll, { passive: true });
+}
+
+// Menu navbar pada layar kecil: buka/tutup panel, tutup saat link dipilih, Esc, klik di luar, atau layar melebar.
+function initNavToggle() {
+  const header = document.querySelector(".top");
+  const btn = document.getElementById("nav-toggle");
+  if (!header || !btn) return;
+
+  const set = (open) => {
+    header.classList.toggle("is-open", open);
+    btn.setAttribute("aria-expanded", String(open));
+  };
+
+  btn.addEventListener("click", () => set(!header.classList.contains("is-open")));
+
+  document.addEventListener("click", (e) => {
+    if (!header.classList.contains("is-open")) return;
+    if (e.target.closest("#site-menu a") || !e.target.closest(".top")) set(false);
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && header.classList.contains("is-open")) {
+      set(false);
+      btn.focus();
+    }
+  });
+
+  window.matchMedia("(min-width: 761px)").addEventListener("change", (e) => {
+    if (e.matches) set(false);
+  });
 }
